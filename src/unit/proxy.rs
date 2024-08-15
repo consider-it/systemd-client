@@ -1,6 +1,6 @@
 use crate::{Result, UnitProps};
 
-#[zbus::dbus_proxy(
+#[zbus::proxy(
     interface = "org.freedesktop.systemd1.Unit",
     default_service = "org.freedesktop.systemd1"
 )]

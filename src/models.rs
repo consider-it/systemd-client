@@ -276,6 +276,7 @@ pub struct UnitProps {
 }
 
 impl UnitProps {
+    #[must_use]
     pub fn builder() -> UnitPropsBuilder {
         UnitPropsBuilder::default()
     }
@@ -296,6 +297,7 @@ impl Default for UnitPropsBuilder {
 }
 
 impl UnitPropsBuilder {
+    #[must_use]
     pub fn new() -> Self {
         UnitPropsBuilder {
             id: None,
@@ -306,31 +308,37 @@ impl UnitPropsBuilder {
         }
     }
 
+    #[must_use]
     pub fn id(mut self, id: String) -> Self {
         self.id = Some(id);
         self
     }
 
+    #[must_use]
     pub fn description(mut self, description: String) -> Self {
         self.description = Some(description);
         self
     }
 
+    #[must_use]
     pub fn load_state(mut self, load_state: String) -> Self {
         self.load_state = Some(load_state.into());
         self
     }
 
+    #[must_use]
     pub fn active_state(mut self, active_state: String) -> Self {
         self.active_state = Some(active_state.into());
         self
     }
 
+    #[must_use]
     pub fn sub_state(mut self, sub_state: String) -> Self {
         self.sub_state = Some(sub_state.into());
         self
     }
 
+    #[must_use]
     pub fn build(self) -> UnitProps {
         let id = self.id.expect("id undefined");
         let description = self.description.expect("description undefined");

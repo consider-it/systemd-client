@@ -19,7 +19,7 @@ async fn main() -> Result<()> {
         .unit(unit_builder)
         .service(svc_builder)
         .build();
-    let svc_unit_literal = format!("{}", svc_unit);
+    let svc_unit_literal = format!("{svc_unit}");
     // create /etc/systemd/system/test.service
     create_unit_configuration_file("test.service", svc_unit_literal.as_bytes())?;
     let client = manager::build_nonblock_proxy().await?;
@@ -30,14 +30,14 @@ async fn main() -> Result<()> {
     // verify unit state given unit path
     let client = unit::build_nonblock_proxy(svc_unit_path).await?;
     let unit_props = client.get_properties().await?;
-    println!("{:?}", unit_props);
+    println!("{unit_props:?}");
     assert_eq!(unit_props.load_state, UnitLoadStateType::Loaded);
     assert_eq!(unit_props.active_state, UnitActiveStateType::Active);
     assert_eq!(unit_props.sub_state, UnitSubStateType::Running);
     std::thread::sleep(std::time::Duration::from_secs(4));
     // service should exit after 3 sec
     let unit_props = client.get_properties().await?;
-    println!("{:?}", unit_props);
+    println!("{unit_props:?}");
     assert_eq!(unit_props.load_state, UnitLoadStateType::Loaded);
     assert_eq!(unit_props.active_state, UnitActiveStateType::Inactive);
     assert_eq!(unit_props.sub_state, UnitSubStateType::Dead);

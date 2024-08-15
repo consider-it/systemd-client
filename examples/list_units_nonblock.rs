@@ -6,7 +6,7 @@ pub async fn main() -> Result<()> {
     let units = client.list_units().await?;
     for unit in units {
         let unit: Unit = unit.into();
-        println!("{:#?}", unit);
+        println!("{unit:#?}");
     }
     Ok(())
 }

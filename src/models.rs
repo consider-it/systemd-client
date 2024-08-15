@@ -174,8 +174,9 @@ impl ToString for UnitSubStateType {
             UnitSubStateType::Active => String::from("active"),
             UnitSubStateType::AutoRestart => String::from("auto-restart"),
             UnitSubStateType::Deactivating => String::from("deactivating"),
-            UnitSubStateType::DeactivatingSigterm => String::from("deactivating-sigkill"),
-            UnitSubStateType::DeactivatingSigkill => String::from("deactivating-sigkill"),
+            UnitSubStateType::DeactivatingSigterm | UnitSubStateType::DeactivatingSigkill => {
+                String::from("deactivating-sigkill")
+            }
             UnitSubStateType::Dead => String::from("dead"),
             UnitSubStateType::Elapsed => String::from("elapsed"),
             UnitSubStateType::Exited => String::from("exited"),
@@ -245,10 +246,7 @@ impl From<UnitTuple> for Unit {
         let load_state: UnitLoadStateType = t.2.into();
         let active_state: UnitActiveStateType = t.3.into();
         let sub_state: UnitSubStateType = t.4.into();
-        let follow_unit = match t.5.is_empty() {
-            true => None,
-            false => Some(t.5),
-        };
+        let follow_unit = if t.5.is_empty() { None } else { Some(t.5) };
         let object_path = t.6;
         let job_id = t.7;
         let job_ty = t.8;
@@ -278,6 +276,7 @@ pub struct UnitProps {
 }
 
 impl UnitProps {
+    #[must_use]
     pub fn builder() -> UnitPropsBuilder {
         UnitPropsBuilder::default()
     }
@@ -298,6 +297,7 @@ impl Default for UnitPropsBuilder {
 }
 
 impl UnitPropsBuilder {
+    #[must_use]
     pub fn new() -> Self {
         UnitPropsBuilder {
             id: None,
@@ -308,31 +308,37 @@ impl UnitPropsBuilder {
         }
     }
 
+    #[must_use]
     pub fn id(mut self, id: String) -> Self {
         self.id = Some(id);
         self
     }
 
+    #[must_use]
     pub fn description(mut self, description: String) -> Self {
         self.description = Some(description);
         self
     }
 
+    #[must_use]
     pub fn load_state(mut self, load_state: String) -> Self {
         self.load_state = Some(load_state.into());
         self
     }
 
+    #[must_use]
     pub fn active_state(mut self, active_state: String) -> Self {
         self.active_state = Some(active_state.into());
         self
     }
 
+    #[must_use]
     pub fn sub_state(mut self, sub_state: String) -> Self {
         self.sub_state = Some(sub_state.into());
         self
     }
 
+    #[must_use]
     pub fn build(self) -> UnitProps {
         let id = self.id.expect("id undefined");
         let description = self.description.expect("description undefined");

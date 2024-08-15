@@ -6,7 +6,7 @@ fn test_blocking() {
     let units = client.list_units().expect("list units failed");
     for unit in units {
         let unit: Unit = unit.into();
-        println!("{:#?}", unit);
+        println!("{unit:#?}");
     }
 }
 
@@ -18,6 +18,6 @@ async fn test_nonblock() {
     let units = client.list_units().await.expect("list units failed");
     for unit in units {
         let unit: Unit = unit.into();
-        println!("{:#?}", unit);
+        println!("{unit:#?}");
     }
 }

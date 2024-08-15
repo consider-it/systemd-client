@@ -15,6 +15,7 @@ impl<'a> Display for UnitConfiguration<'a> {
 }
 
 impl<'a> UnitConfiguration<'a> {
+    #[must_use]
     pub fn builder() -> UnitConfigurationBuilder<'a> {
         UnitConfigurationBuilder::default()
     }
@@ -27,16 +28,19 @@ pub struct UnitConfigurationBuilder<'a> {
 }
 
 impl<'a> UnitConfigurationBuilder<'a> {
+    #[must_use]
     pub fn description(mut self, description: &'a str) -> Self {
         self.description = description;
         self
     }
 
+    #[must_use]
     pub fn after(mut self, after: &'a str) -> Self {
         self.after.push(after);
         self
     }
 
+    #[must_use]
     pub fn build(self) -> UnitConfiguration<'a> {
         let description = self.description;
         let after = self.after;
@@ -57,7 +61,7 @@ impl Display for ServiceType {
             ServiceType::Exec => "exec",
             ServiceType::Forking => "forking",
         };
-        write!(f, "{}", ty)
+        write!(f, "{ty}")
     }
 }
 
@@ -76,7 +80,7 @@ impl Display for RestartPolicy {
             RestartPolicy::OnFailure => "on-failure",
             RestartPolicy::Always => "always",
         };
-        write!(f, "{}", policy)
+        write!(f, "{policy}")
     }
 }
 
@@ -86,6 +90,7 @@ pub struct EnvironmentVariable<'a> {
 }
 
 impl<'a> EnvironmentVariable<'a> {
+    #[must_use]
     pub fn builder() -> EnvironmentVariableBuilder<'a> {
         EnvironmentVariableBuilder::default()
     }
@@ -109,6 +114,7 @@ impl<'a> Default for EnvironmentVariableBuilder<'a> {
 }
 
 impl<'a> EnvironmentVariableBuilder<'a> {
+    #[must_use]
     pub fn new() -> Self {
         EnvironmentVariableBuilder {
             key: None,
@@ -116,16 +122,19 @@ impl<'a> EnvironmentVariableBuilder<'a> {
         }
     }
 
+    #[must_use]
     pub fn key(mut self, key: &'a str) -> Self {
         self.key = Some(key);
         self
     }
 
+    #[must_use]
     pub fn value(mut self, value: &'a str) -> Self {
         self.value = Some(value);
         self
     }
 
+    #[must_use]
     pub fn build(self) -> EnvironmentVariable<'a> {
         let key = self.key.expect("key undefined");
         let value = self.value.expect("value undefined");
@@ -150,16 +159,16 @@ impl<'a> Display for ServiceConfiguration<'a> {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         writeln!(f, "[Service]")?;
         if let Some(working_directory) = self.working_directory {
-            writeln!(f, "WorkingDirectory={}", working_directory)?;
+            writeln!(f, "WorkingDirectory={working_directory}")?;
         }
         if let Some(user) = self.user {
-            writeln!(f, "User={}", user)?;
+            writeln!(f, "User={user}")?;
         }
         if let Some(group) = self.group {
-            writeln!(f, "Group={}", group)?;
+            writeln!(f, "Group={group}")?;
         }
-        for env in self.envs.iter() {
-            writeln!(f, r#"Environment="{}""#, env)?;
+        for env in &self.envs {
+            writeln!(f, r#"Environment="{env}""#)?;
         }
         writeln!(f, "ExecStart={}", self.exec_start.join(" "))?;
         writeln!(f, "Restart={}", self.restart_policy)?;
@@ -168,6 +177,7 @@ impl<'a> Display for ServiceConfiguration<'a> {
 }
 
 impl<'a> ServiceConfiguration<'a> {
+    #[must_use]
     pub fn builder() -> ServiceConfigurationBuilder<'a> {
         ServiceConfigurationBuilder::default()
     }
@@ -200,47 +210,56 @@ impl<'a> Default for ServiceConfigurationBuilder<'a> {
 }
 
 impl<'a> ServiceConfigurationBuilder<'a> {
+    #[must_use]
     pub fn ty(mut self, ty: ServiceType) -> Self {
         self.ty = ty;
         self
     }
 
+    #[must_use]
     pub fn exec_start(mut self, exec_start: Vec<&'a str>) -> Self {
         self.exec_start = exec_start;
         self
     }
 
+    #[must_use]
     pub fn restart_policy(mut self, restart_policy: RestartPolicy) -> Self {
         self.restart_policy = restart_policy;
         self
     }
 
+    #[must_use]
     pub fn restart_sec(mut self, restart_sec: &'a str) -> Self {
         self.restart_sec = restart_sec;
         self
     }
 
+    #[must_use]
     pub fn working_directory(mut self, working_directory: &'a str) -> Self {
         self.working_directory = Some(working_directory);
         self
     }
 
+    #[must_use]
     pub fn user(mut self, user: &'a str) -> Self {
         self.user = Some(user);
         self
     }
 
+    #[must_use]
     pub fn group(mut self, group: &'a str) -> Self {
         self.group = Some(group);
         self
     }
 
+    #[must_use]
     pub fn env(mut self, key: &'a str, value: &'a str) -> Self {
         self.envs
             .push(EnvironmentVariable::builder().key(key).value(value).build());
         self
     }
 
+    #[must_use]
     pub fn build(self) -> ServiceConfiguration<'a> {
         let ty = self.ty;
         let exec_start = self.exec_start;
@@ -275,6 +294,7 @@ impl<'a> Display for InstallConfiguration<'a> {
 }
 
 impl<'a> InstallConfiguration<'a> {
+    #[must_use]
     pub fn builder() -> InstallConfigurationBuilder<'a> {
         InstallConfigurationBuilder::default()
     }
@@ -294,11 +314,13 @@ impl<'a> Default for InstallConfigurationBuilder<'a> {
 }
 
 impl<'a> InstallConfigurationBuilder<'a> {
+    #[must_use]
     pub fn wanted_by(mut self, wanted_by: &'a str) -> Self {
         self.wanted_by.push(wanted_by);
         self
     }
 
+    #[must_use]
     pub fn build(self) -> InstallConfiguration<'a> {
         let wanted_by = self.wanted_by;
         InstallConfiguration { wanted_by }
@@ -319,6 +341,7 @@ impl<'a> Display for ServiceUnitConfiguration<'a> {
 }
 
 impl<'a> ServiceUnitConfiguration<'a> {
+    #[must_use]
     pub fn builder() -> ServiceUnitConfigurationBuilder<'a> {
         ServiceUnitConfigurationBuilder::default()
     }
@@ -332,21 +355,25 @@ pub struct ServiceUnitConfigurationBuilder<'a> {
 }
 
 impl<'a> ServiceUnitConfigurationBuilder<'a> {
+    #[must_use]
     pub fn unit(mut self, unit: UnitConfigurationBuilder<'a>) -> Self {
         self.unit = unit;
         self
     }
 
+    #[must_use]
     pub fn service(mut self, service: ServiceConfigurationBuilder<'a>) -> Self {
         self.service = service;
         self
     }
 
+    #[must_use]
     pub fn install(mut self, install: InstallConfigurationBuilder<'a>) -> Self {
         self.install = install;
         self
     }
 
+    #[must_use]
     pub fn build(self) -> ServiceUnitConfiguration<'a> {
         let unit = self.unit.build();
         let service = self.service.build();

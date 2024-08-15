@@ -14,7 +14,7 @@ fn test_service_template() {
         .unit(unit_builder)
         .service(svc_builder)
         .build();
-    let actual_svc_unit = format!("{}", svc_unit);
+    let actual_svc_unit = format!("{svc_unit}");
     let buffer =
         std::fs::read("tests/resources/test.service").expect("open file 'test.service' failed");
     let expected_svc_unit = String::from_utf8(buffer).expect("invalid utf-8 in 'test.service'");

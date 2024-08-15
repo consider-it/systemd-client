@@ -174,8 +174,9 @@ impl ToString for UnitSubStateType {
             UnitSubStateType::Active => String::from("active"),
             UnitSubStateType::AutoRestart => String::from("auto-restart"),
             UnitSubStateType::Deactivating => String::from("deactivating"),
-            UnitSubStateType::DeactivatingSigterm => String::from("deactivating-sigkill"),
-            UnitSubStateType::DeactivatingSigkill => String::from("deactivating-sigkill"),
+            UnitSubStateType::DeactivatingSigterm | UnitSubStateType::DeactivatingSigkill => {
+                String::from("deactivating-sigkill")
+            }
             UnitSubStateType::Dead => String::from("dead"),
             UnitSubStateType::Elapsed => String::from("elapsed"),
             UnitSubStateType::Exited => String::from("exited"),
@@ -245,10 +246,7 @@ impl From<UnitTuple> for Unit {
         let load_state: UnitLoadStateType = t.2.into();
         let active_state: UnitActiveStateType = t.3.into();
         let sub_state: UnitSubStateType = t.4.into();
-        let follow_unit = match t.5.is_empty() {
-            true => None,
-            false => Some(t.5),
-        };
+        let follow_unit = if t.5.is_empty() { None } else { Some(t.5) };
         let object_path = t.6;
         let job_id = t.7;
         let job_ty = t.8;

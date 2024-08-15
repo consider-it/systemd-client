@@ -5,7 +5,7 @@ fn main() -> Result<()> {
     let units = client.list_units()?;
     for unit in units {
         let unit: Unit = unit.into();
-        println!("{:#?}", unit);
+        println!("{unit:#?}");
     }
     Ok(())
 }

@@ -57,7 +57,7 @@ impl Display for ServiceType {
             ServiceType::Exec => "exec",
             ServiceType::Forking => "forking",
         };
-        write!(f, "{}", ty)
+        write!(f, "{ty}")
     }
 }
 
@@ -76,7 +76,7 @@ impl Display for RestartPolicy {
             RestartPolicy::OnFailure => "on-failure",
             RestartPolicy::Always => "always",
         };
-        write!(f, "{}", policy)
+        write!(f, "{policy}")
     }
 }
 
@@ -150,16 +150,16 @@ impl<'a> Display for ServiceConfiguration<'a> {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         writeln!(f, "[Service]")?;
         if let Some(working_directory) = self.working_directory {
-            writeln!(f, "WorkingDirectory={}", working_directory)?;
+            writeln!(f, "WorkingDirectory={working_directory}")?;
         }
         if let Some(user) = self.user {
-            writeln!(f, "User={}", user)?;
+            writeln!(f, "User={user}")?;
         }
         if let Some(group) = self.group {
-            writeln!(f, "Group={}", group)?;
+            writeln!(f, "Group={group}")?;
         }
-        for env in self.envs.iter() {
-            writeln!(f, r#"Environment="{}""#, env)?;
+        for env in &self.envs {
+            writeln!(f, r#"Environment="{env}""#)?;
         }
         writeln!(f, "ExecStart={}", self.exec_start.join(" "))?;
         writeln!(f, "Restart={}", self.restart_policy)?;

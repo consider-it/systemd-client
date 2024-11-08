@@ -13,6 +13,7 @@ trait SystemdManager {
     fn restart_unit(&self, name: &str, mode: &str) -> zbus::Result<zvariant::OwnedObjectPath>;
     fn start_unit(&self, name: &str, mode: &str) -> zbus::Result<zvariant::OwnedObjectPath>;
     fn stop_unit(&self, name: &str, mode: &str) -> zbus::Result<zvariant::OwnedObjectPath>;
+    fn reboot(&self) -> zbus::Result<()>;
     #[dbus_proxy(property)]
     fn architecture(&self) -> zbus::Result<String>;
     #[dbus_proxy(property)]

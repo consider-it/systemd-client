@@ -15,7 +15,7 @@ keywords = ["systemd", "zbus"]
 [dependencies]
 zbus = "4.4"
 zvariant = "4.2"
-thiserror = "1.0.29"
+thiserror = "2.0.16"
 tracing = "0.1"
 
 [dev-dependencies]
